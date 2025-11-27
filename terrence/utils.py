@@ -19,7 +19,7 @@ def parse_github_url(url: str):
   else:
     raise ValueError(f"Invalid GitHub URL: {url}")
 
-def should_scan_file(file_path: str) -> bool:
+def should_scan_file(file_path: str, extensions: list[str] = None) -> bool:
   excluded_dirs = [
     'node_modules/',
     '.git/',
@@ -55,7 +55,20 @@ def should_scan_file(file_path: str) -> bool:
     if excluded_dir in file_path:
       return False
   
-  if file_path.endswith(allowed_extensions):
-    return True
+  if extensions is not None:
+    normalized_extensions = []
+    # Go through loop of extensions, add . in front of them if not present
+    for ext in extensions:
+      if not ext.startswith('.'):
+        ext = f'.{ext}'
+      normalized_extensions.append(ext)
+    
+    # Ensure each extension is valid
+    for ext in normalized_extensions:
+      if ext not in allowed_extensions:
+        raise ValueError(f"Extension '{ext}' is not in allowed extensions. ")
+    
+    # Return true for each file that ends with one of the provided extensions that are verified
+    return file_path.endswith(tuple(normalized_extensions))
 
-  return False
+  return file_path.endswith(allowed_extensions)
