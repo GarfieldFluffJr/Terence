@@ -50,3 +50,10 @@ class Terrence:
     self.results = {}
     self.last_repo_url = None
   
+""" Possible edge cases
+  - Invalid GitHub URL
+  - Private repository access
+  - Rate limiting from GitHub API
+  - Large repositories causing timeouts
+  - Token doesn't have necessary permissions
+"""
