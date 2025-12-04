@@ -66,7 +66,7 @@ if __name__ == "__main__":
     print("="*70)
 
     terrence_test4 = Terrence().auth(token)
-    terrence_test4.scan_repository("https://github.com/octocat/Hello-World")
+    terrence_test4.scan_repository("https://github.com/pallets/click")
 
     print(f"Before clear: {terrence_test4}")
     terrence_test4.clear_results()

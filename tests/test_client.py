@@ -73,21 +73,23 @@ class TestTerrenceScanRepository:
         """Test that scanning without auth raises error"""
         terrence = Terrence()
         with pytest.raises(Exception, match="Not authenticated"):
-            terrence.scan_repository("https://github.com/octocat/Hello-World")
+            terrence.scan_repository("https://github.com/pallets/click")
 
     def test_scan_small_repo(self, terrence):
-        """Test scanning a small repository"""
-        terrence.scan_repository("https://github.com/psf/requests")
+        """Test scanning a small repository with Python files"""
+        terrence.scan_repository("https://github.com/pallets/click")
 
-        assert len(terrence.results) > 0
-        assert terrence.last_repo_url == "https://github.com/psf/requests"
-        assert "README" in terrence.results
+        assert len(terrence.results) > 0, "Expected to find files in repository"
+        assert terrence.last_repo_url == "https://github.com/pallets/click"
+        # Check that we found Python files (not README which has no extension)
+        py_files = [path for path in terrence.results.keys() if path.endswith('.py')]
+        assert len(py_files) > 0, f"Expected Python files, found: {list(terrence.results.keys())[:5]}"
 
     def test_scan_invalid_token_raises_error(self):
         """Test that invalid token raises error"""
         bad_terrence = Terrence().auth("ghp_invalid_token")
         with pytest.raises(Exception, match="Invalid GitHub token"):
-            bad_terrence.scan_repository("https://github.com/octocat/Hello-World")
+            bad_terrence.scan_repository("https://github.com/pallets/click")
 
     def test_scan_nonexistent_repo_raises_error(self, terrence):
         """Test that nonexistent repo raises error"""
@@ -97,7 +99,7 @@ class TestTerrenceScanRepository:
     def test_scan_updates_repr(self, terrence):
         """Test that scanning updates __repr__"""
         before = repr(terrence)
-        terrence.scan_repository("https://github.com/octocat/Hello-World")
+        terrence.scan_repository("https://github.com/pallets/click")
         after = repr(terrence)
 
         assert "no scans yet" in before
@@ -109,7 +111,7 @@ class TestTerrenceClearMethods:
 
     def test_clear_results(self, terrence):
         """Test clear_results() clears results but keeps auth"""
-        terrence.scan_repository("https://github.com/octocat/Hello-World")
+        terrence.scan_repository("https://github.com/pallets/click")
 
         assert len(terrence.results) > 0
         assert terrence.last_repo_url is not None
@@ -123,7 +125,7 @@ class TestTerrenceClearMethods:
 
     def test_clear_all(self, terrence):
         """Test clear_all() clears everything"""
-        terrence.scan_repository("https://github.com/octocat/Hello-World")
+        terrence.scan_repository("https://github.com/pallets/click")
 
         terrence.clear_all()
 
@@ -138,10 +140,10 @@ class TestTerrenceEdgeCases:
 
     def test_scan_twice_overwrites_results(self, terrence):
         """Test that scanning twice overwrites previous results"""
-        terrence.scan_repository("https://github.com/octocat/Hello-World")
+        terrence.scan_repository("https://github.com/pallets/click")
         first_results = dict(terrence.results)
 
-        terrence.scan_repository("https://github.com/octocat/Hello-World")
+        terrence.scan_repository("https://github.com/pallets/click")
         second_results = dict(terrence.results)
 
         # Results should be the same (same repo)
