@@ -21,10 +21,12 @@ class Terrence:
     self._auth = None # private variable
     self.results = {}
     self.last_repo_url = None
+    self.branch = None
 
   # Representation method so when user performs print(terrence), they see info rather than memory address
   def __repr__(self):
     auth_status = "authenticated" if self._auth else "not authenticated"
+    branch_info = f", branch={self.branch}" if self.branch else ""
     if self.results:
         return f"Terrence({auth_status}, files={len(self.results)})"
     else:
@@ -78,6 +80,7 @@ class Terrence:
   def clear_results(self):
     self.results = {}
     self.last_repo_url = None
+    self.branch = None
 
   # Deauthenticate as well
   def clear_all(self):
@@ -85,6 +88,7 @@ class Terrence:
     self._auth = None
     self.results = {}
     self.last_repo_url = None
+    self.branch = None
 
   # Check current rate limit status
   def get_rate_limit(self):
@@ -145,7 +149,11 @@ class Terrence:
       if remaining < 10:
         raise RateLimitException(f"Rate limit reached during scan: {remaining} requests remaining. Resets at {reset_time.strftime('%Y-%m-%d %H:%M:%S UTC')}")
 
-    contents = repo.get_contents(path) # Get contents at the current path from GitHub
+    # Get contents at the current path from GitHub in the specified branch
+    if self.branch:
+      contents = repo.get_contents(path, ref=self.branch)
+    else:
+      contents = repo.get_contents(path)
 
     # Take care of edge case where contents is one object file, so wrap it in a single-element list
     if not isinstance(contents, list):
@@ -169,4 +177,10 @@ class Terrence:
             pass
 
     return results
+  
+  # Set the branch property
+  def branch(self, branch_name: str):
+    self.branch = branch_name
+    return self # Allow chaining
+  
   
