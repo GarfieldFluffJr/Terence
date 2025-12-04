@@ -21,16 +21,16 @@ class Terrence:
     self._auth = None # private variable
     self.results = {}
     self.last_repo_url = None
-    self.branch = None
+    self._branch = None  # Private variable for branch/commit
 
   # Representation method so when user performs print(terrence), they see info rather than memory address
   def __repr__(self):
     auth_status = "authenticated" if self._auth else "not authenticated"
-    branch_info = f", branch={self.branch}" if self.branch else ""
+    branch_info = f", branch={self._branch}" if self._branch else ""
     if self.results:
-        return f"Terrence({auth_status}, files={len(self.results)})"
+        return f"Terrence({auth_status}{branch_info}, files={len(self.results)})"
     else:
-        return f"Terrence({auth_status}, no scans yet)"
+        return f"Terrence({auth_status}{branch_info}, no scans yet)"
 
   def auth(self, token: str):
     self.token = token
@@ -80,7 +80,7 @@ class Terrence:
   def clear_results(self):
     self.results = {}
     self.last_repo_url = None
-    self.branch = None
+    self._branch = None
 
   # Deauthenticate as well
   def clear_all(self):
@@ -88,7 +88,7 @@ class Terrence:
     self._auth = None
     self.results = {}
     self.last_repo_url = None
-    self.branch = None
+    self._branch = None
 
   # Check current rate limit status
   def get_rate_limit(self):
@@ -150,8 +150,8 @@ class Terrence:
         raise RateLimitException(f"Rate limit reached during scan: {remaining} requests remaining. Resets at {reset_time.strftime('%Y-%m-%d %H:%M:%S UTC')}")
 
     # Get contents at the current path from GitHub in the specified branch
-    if self.branch:
-      contents = repo.get_contents(path, ref=self.branch)
+    if self._branch:
+      contents = repo.get_contents(path, ref=self._branch)
     else:
       contents = repo.get_contents(path)
 
@@ -180,7 +180,7 @@ class Terrence:
   
   # Set the branch property
   def branch(self, branch_name: str):
-    self.branch = branch_name
-    return self # Allow chaining
+    self._branch = branch_name
+    return self  # Allow chaining
   
   
