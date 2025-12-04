@@ -13,8 +13,8 @@ Usage:
     print(f"Found {len(terrence.results)} files")
 """
 
-from terrence.client import Terrence
+from terrence.client import Terrence, RateLimitException
 from terrence.utils import parse_github_url, should_scan_file
 
 __version__ = "0.1.0"
-__all__ = ["Terrence", "parse_github_url", "should_scan_file"]
+__all__ = ["Terrence", "RateLimitException", "parse_github_url", "should_scan_file"]
