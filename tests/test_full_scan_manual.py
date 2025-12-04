@@ -19,7 +19,7 @@ print("=" * 70)
 # - "https://github.com/github/gitignore" (simple, flat structure)
 # - "https://github.com/octocat/Spoon-Knife" (very small)
 # - "https://github.com/pallets/click" (medium, has nesting)
-TEST_REPO_URL = "https://github.com/octocat/Spoon-Knife"
+TEST_REPO_URL = "https://github.com/pallets/click"
 
 terrence = Terrence().auth(token)
 
