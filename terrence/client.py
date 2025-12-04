@@ -46,8 +46,8 @@ class Terrence:
       with Github(auth=self._auth) as g:
         # Check rate limit before starting scan
         rate_limit = g.get_rate_limit()
-        remaining = rate_limit.core.remaining
-        reset_time = rate_limit.core.reset
+        remaining = rate_limit.rate.remaining
+        reset_time = rate_limit.rate.reset
 
         # Need at least 10 requests to scan anything useful
         if remaining < 10:
@@ -104,9 +104,9 @@ class Terrence:
     with Github(auth=self._auth) as g:
       rate_limit = g.get_rate_limit()
       return {
-        'remaining': rate_limit.core.remaining,
-        'limit': rate_limit.core.limit,
-        'reset': rate_limit.core.reset
+        'remaining': rate_limit.rate.remaining,
+        'limit': rate_limit.rate.limit,
+        'reset': rate_limit.rate.reset
       }
 
   # Get repository owner and name from last scanned repo
@@ -138,8 +138,8 @@ class Terrence:
     # Check rate limit before making API call
     if github_instance:
       rate_limit = github_instance.get_rate_limit()
-      remaining = rate_limit.core.remaining
-      reset_time = rate_limit.core.reset
+      remaining = rate_limit.rate.remaining
+      reset_time = rate_limit.rate.reset
 
       # If we're running low on requests, stop the scan
       if remaining < 10:
@@ -154,12 +154,10 @@ class Terrence:
     for content in contents:
       # Check if type is directory or file
       if content.type == "dir":
-        print(f"Found directory: {content.path}")
         # Pass github_instance to recursive call
         subdir_results = self._get_files_recursive(repo, content.path, extensions, github_instance)
         results.update(subdir_results) # Merge dictionaries together, in the format { path: content }
       elif content.type == "file":
-        print(f"Found file: {content.path}")
         # Check if we should scan the file
         if should_scan_file(content.path, extensions):
           try:
