@@ -122,8 +122,7 @@ Results is a flat dictionary with each key being the path to the file including 
 terrence.results = {
     'frontend/app/index.html': '<!DOCTYPE html>\n<html>\n<head>\n<meta charset="utf-8">\n</head></html>...',
 
-    'frontend/app/styles/globals.css': 'body {\n  font-family: Arial, sans-serif;\n  background: #f0f0f0;\n  margin: 0;\n  padding: 20px;\n}\n\nh1 
-  {\n  color: #333;\n}'
+    'frontend/app/styles/globals.css': 'body {\n  font-family: Arial, sans-serif;\n  background: #f0f0f0;\n  margin: 0;\n  padding: 20px;\n}\n\nh1 {\n  color: #333;\n}'
 }
 ```
 
