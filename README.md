@@ -114,6 +114,18 @@ for file_path, content in results.items():
         print(f"Found 'def main' in: {file_path})
 ```
 
+### Sample Results Output
+
+Results is a flat dictionary with each key being the path to the file including the file name and the value is the raw contents of the file
+
+```python
+terrence.results = {
+    'frontend/app/index.html': '<!DOCTYPE html>\n<html>\n<head>\n<meta charset="utf-8">\n</head></html>...',
+
+    'frontend/app/styles/globals.css': 'body {\n  font-family: Arial, sans-serif;\n  background: #f0f0f0;\n  margin: 0;\n  padding: 20px;\n}\n\nh1 
+  {\n  color: #333;\n}'
+}
+```
 
 ### Repository Information
 
