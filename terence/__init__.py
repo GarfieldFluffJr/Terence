@@ -16,5 +16,5 @@ Usage:
 from terence.client import Terence, RateLimitException
 from terence.utils import parse_github_url, should_scan_file
 
-__version__ = "1.0.1"
+__version__ = "1.0.2"
 __all__ = ["Terence", "RateLimitException", "parse_github_url", "should_scan_file"]
