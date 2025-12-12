@@ -1,0 +1,12 @@
+# Include important files in the distribution
+include README.md
+include LICENSE
+include requirements.txt
+
+# Exclude unnecessary files
+global-exclude __pycache__
+global-exclude *.py[cod]
+global-exclude .DS_Store
+global-exclude *.so
+global-exclude .git*
+prune tests

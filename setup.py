@@ -4,12 +4,12 @@ setup(
     # Package metadata
     name="terrence",
     version="0.1.0",
-    author="GarfieldFluffJr",  # Update with your name
-    author_email="louieyin6@gmail.com",  # Update with your email
-    description="Give Terrence your GitHub developer token and a public GitHub repo url and he will tell you everything that repo",
-    long_description=open("LICENSE").read() if open("LICENSE").read() else "",
-    long_description_content_type="text/plain",
-    url="https://github.com/GarfieldFluffJr/Terrence",  # Update with your GitHub URL
+    author="GarfieldFluffJr",
+    author_email="louieyin6@gmail.com",
+    description="Terrence is a Python package that makes it easy to scan and analyze GitHub repositories. It simplifies the GitHub API and processes the repo contents into a simple flat dictionary that can be accessed by file path.",
+    long_description=open("README.md", encoding="utf-8").read(),
+    long_description_content_type="text/markdown",
+    url="https://github.com/GarfieldFluffJr/Terrence",
 
     # Package discovery
     packages=find_packages(exclude=["tests", "tests.*"]),
@@ -30,14 +30,27 @@ setup(
     # Python version requirement
     python_requires=">=3.8",
 
-    # Package classifiers (optional, for PyPI)
+    # Package classifiers (helps users find your package on PyPI)
     classifiers=[
         "Development Status :: 3 - Alpha",
         "Intended Audience :: Developers",
+        "License :: OSI Approved :: MIT License",
+        "Operating System :: OS Independent",
         "Programming Language :: Python :: 3",
         "Programming Language :: Python :: 3.8",
         "Programming Language :: Python :: 3.9",
         "Programming Language :: Python :: 3.10",
         "Programming Language :: Python :: 3.11",
+        "Topic :: Software Development :: Libraries :: Python Modules",
+        "Topic :: Software Development :: Version Control :: Git",
     ],
+
+    # Keywords for PyPI search
+    keywords="github api repository scanner code-analysis git python content decode",
+
+    # Project URLs
+    project_urls={
+        "Source": "https://github.com/GarfieldFluffJr/Terrence",
+        "Documentation + Support": "https://github.com/GarfieldFluffJr/Terrence#readme",
+    },
 )
