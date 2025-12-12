@@ -8,3 +8,5 @@ __pycache__/
 dist/
 build/
 .vscode/
+
+PROJECT_SUMMARY.md
