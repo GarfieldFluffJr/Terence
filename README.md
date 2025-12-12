@@ -2,7 +2,7 @@
 
 # ![Terrence Picture](terrence.jpg)
 
-Terrence is a Python package that makes it easy to scan and analyze GitHub repositories. It simplifies the GitHub API and processes the repo contents into a simple flat list that can be accessed by file path.
+Terrence is a Python package that makes it easy to scan and analyze GitHub repositories. It simplifies the GitHub API and processes the repo contents into a simple flat dictionary that can be accessed by file path.
 
 
 ## Installation
@@ -95,17 +95,25 @@ terrence.scan_repository("https://github.com/user/repo_name")
 
 ### Accessing Results
 
-```python
-terrence.scan_repository("https://github.com/pallets/click")
+Once a scan is performed, the repository's file contents are stored in a flat dictionary in `terrence.results`.
 
-# Results is a dictionary: {file_path: file_content}
-for file_path, content in terrence.results.items():
-    print(f"\n{'='*60}")
-    print(f"File: {file_path}")
-    print(f"Lines: {len(content.splitlines())}")
-    print(f"{'='*60}")
-    print(content[:500])  # First 500 characters
+```python
+results = terrence.results
+
+# List all files:
+for path in results.keys():
+    print(f" - {path}")
+
+# Print the first 200 characters of a specific file
+if "frontend/app/page.tsx" in results:
+    print(results["frontend/app/page.tsx"][:200])
+
+# Search content across files
+for file_path, content in results.items():
+    if "def main" in content:
+        print(f"Found 'def main' in: {file_path})
 ```
+
 
 ### Repository Information
 
