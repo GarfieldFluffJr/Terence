@@ -151,7 +151,8 @@ rate = terrence.get_rate_limit()
 rate = {
     'remaining': 4102,
     'limit': 5000, # GitHub limit
-    'reset': datetime.datetime(2025, 12, 4, 18, 30, 0, tzinfo=datetime.timezone.utc) # Date format yyyy-mm-dd hr:min:sec+00:00 timezone
+    # Date format yyyy-mm-dd hr:min:sec+00:00 timezone
+    'reset': datetime.datetime(2025, 12, 4, 18, 30, 0, tzinfo=datetime.timezone.utc)
 }
 ```
 
