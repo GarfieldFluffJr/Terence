@@ -7,14 +7,6 @@ class RateLimitException(Exception):
   pass
 
 class Terrence:
-  """
-    Class that scans public repositories and stores results in each instance
-
-    Usage:
-      terrence = Terrence() <- Initialize the class
-      terrence.auth("ghp_token") <- Authenticate with GitHub
-      terrence.scan_repository("url") <- Scan a repository (must be public)
-  """
 
   def __init__(self):
     self.token = None

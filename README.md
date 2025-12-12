@@ -141,7 +141,7 @@ repo_info = {
 
 ### Rate Limit Management
 
-GitHub API allows for 5000 requests per hour per API token.
+GitHub API allows for 5000 requests per hour per authenticated API token or 60 for unauthenticated.
 
 Terrence automatically flags a `RateLimitError` if rate limit is too low to make a new repository scan request.
 
@@ -189,108 +189,6 @@ except Exception as e:
     print(f"Error: {e}")
     # Handle authentication, repo not found, etc.
 ```
-
-## API Reference
-
-### `Terrence()`
-
-Initialize a new Terrence instance.
-
-```python
-terrence = Terrence()
-```
-
-### `.auth(token: str) -> self`
-
-Authenticate with a GitHub personal access token.
-
-- **Parameters:**
-  - `token` (str): GitHub personal access token
-- **Returns:** self (for method chaining)
-
-```python
-terrence.auth("ghp_your_token_here")
-```
-
-### `.scan_repository(repo_url: str, extensions: list = None) -> None`
-
-Scan a GitHub repository and store results.
-
-- **Parameters:**
-  - `repo_url` (str): GitHub repository URL
-  - `extensions` (list, optional): List of file extensions to scan (e.g., `["py", "js"]`)
-- **Raises:**
-  - `Exception`: If not authenticated
-  - `ValueError`: If URL is invalid or extensions are not allowed
-  - `RateLimitException`: If rate limit is too low
-  - `Exception`: If repository not found or other GitHub API errors
-
-```python
-terrence.scan_repository("https://github.com/pallets/flask")
-terrence.scan_repository("https://github.com/pallets/flask", extensions=["py"])
-```
-
-### `.branch(branch_name: str) -> self`
-
-Set the branch, tag, or commit to scan.
-
-- **Parameters:**
-  - `branch_name` (str): Branch name, tag, or commit SHA
-- **Returns:** self (for method chaining)
-
-```python
-terrence.branch("develop")
-terrence.branch("v1.0.0")
-terrence.branch("abc123def")
-```
-
-### `.get_rate_limit() -> dict`
-
-Get current GitHub API rate limit information.
-
-- **Returns:** Dictionary with keys:
-  - `remaining` (int): Requests remaining
-  - `limit` (int): Total limit per hour
-  - `reset` (datetime): When the limit resets
-
-```python
-rate = terrence.get_rate_limit()
-print(f"Remaining: {rate['remaining']}/{rate['limit']}")
-```
-
-### `.get_repo_info() -> dict | None`
-
-Get information about the last scanned repository.
-
-- **Returns:** Dictionary with keys `owner`, `repo`, `url` or `None` if no repository scanned
-
-```python
-info = terrence.get_repo_info()
-if info:
-    print(f"{info['owner']}/{info['repo']}")
-```
-
-### `.clear_results() -> None`
-
-Clear scan results and reset branch, but stay authenticated.
-
-```python
-terrence.clear_results()
-```
-
-### `.clear_all() -> None`
-
-Clear everything including authentication.
-
-```python
-terrence.clear_all()
-```
-
-### Instance Variables
-
-- **`results`** (dict): Dictionary mapping file paths to file contents
-- **`last_repo_url`** (str | None): URL of last scanned repository
-- **`token`** (str | None): GitHub authentication token
 
 ## File Filtering
 
@@ -343,78 +241,6 @@ Raised for:
 - Repository not found (or private)
 - Other GitHub API errors
 
-## Examples
-
-### Example 1: Compare Branches
-
-```python
-from terrence import Terrence
-
-terrence = Terrence().auth("ghp_your_token_here")
-
-# Scan main branch
-terrence.branch("main").scan_repository("https://github.com/pallets/click")
-main_files = set(terrence.results.keys())
-
-# Scan develop branch
-terrence.branch("develop").scan_repository("https://github.com/pallets/click")
-develop_files = set(terrence.results.keys())
-
-# Compare
-new_files = develop_files - main_files
-removed_files = main_files - develop_files
-
-print(f"New files in develop: {len(new_files)}")
-print(f"Removed from develop: {len(removed_files)}")
-```
-
-### Example 2: Analyze Code Distribution
-
-```python
-from terrence import Terrence
-from collections import Counter
-
-terrence = Terrence().auth("ghp_your_token_here")
-terrence.scan_repository("https://github.com/pallets/flask")
-
-# Count files by extension
-extensions = Counter()
-for file_path in terrence.results.keys():
-    ext = file_path.split('.')[-1]
-    extensions[ext] += 1
-
-print("Code distribution:")
-for ext, count in extensions.most_common():
-    print(f"  .{ext}: {count} files")
-```
-
-### Example 3: Search for Patterns
-
-```python
-import re
-from terrence import Terrence
-
-terrence = Terrence().auth("ghp_your_token_here")
-terrence.scan_repository("https://github.com/pallets/click")
-
-# Find all TODO comments
-pattern = re.compile(r'#\s*TODO:?\s*(.+)', re.IGNORECASE)
-
-todos = []
-for file_path, content in terrence.results.items():
-    for line_num, line in enumerate(content.splitlines(), 1):
-        match = pattern.search(line)
-        if match:
-            todos.append({
-                'file': file_path,
-                'line': line_num,
-                'todo': match.group(1).strip()
-            })
-
-print(f"Found {len(todos)} TODOs:")
-for todo in todos[:10]:  # Show first 10
-    print(f"  {todo['file']}:{todo['line']} - {todo['todo']}")
-```
 
 ## Development
 
@@ -439,60 +265,22 @@ pytest tests/test_client.py::TestTerrence::test_auth -v
 pytest tests/test_client.py --cov=terrence --cov-report=html
 ```
 
-### Project Structure
-
-```
-terrence/
-├── terrence/              # Main package
-│   ├── __init__.py       # Package exports
-│   ├── client.py         # Terrence class & RateLimitException
-│   └── utils.py          # Helper functions
-├── tests/                # Test suite
-│   ├── test_client.py    # Pytest tests
-│   └── test_*_manual.py  # Manual testing scripts
-├── setup.py              # Package configuration
-├── requirements.txt      # Dependencies
-└── README.md            # This file
-```
-
 ## Requirements
 
 - Python 3.7+
 - PyGithub >= 2.1.1
 - python-dotenv >= 1.0.0
 
-## Rate Limits
-
-GitHub API rate limits:
-- **Authenticated:** 5,000 requests per hour
-- **Unauthenticated:** 60 requests per hour
-
-Terrence automatically monitors your rate limit and will raise `RateLimitException` if you have fewer than 10 requests remaining.
-
 ## License
 
 MIT License - see LICENSE file for details
 
-## Contributing
+## Contributions & Support
 
-Contributions are welcome! Please feel free to submit a Pull Request.
+Contributions are welcome! Feel free to fork and submit a pull request.
 
-## Support
-
-- **Issues:** https://github.com/yourusername/terrence/issues
-- **Documentation:** https://github.com/yourusername/terrence
+For any questions or concerns, please reach out to me at [louieyin6@gmail.com](mailto:louieyin6@gmail.com)
 
 ## Author
 
-Created by [Your Name]
-
-## Changelog
-
-### v0.1.0 (Initial Release)
-
-- GitHub repository scanning
-- Smart file filtering
-- Branch/commit support
-- Rate limit protection
-- Extension filtering
-- Repository metadata access
+Created by Louie Yin (GarfieldFluffJr)
