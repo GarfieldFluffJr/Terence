@@ -1,17 +1,28 @@
 """Pytest tests for client module"""
+import os
 import pytest
 from terrence import Terrence
 from dotenv import dotenv_values
 
 
-# Fixture to load token from .env
+# Fixture to load token from environment variable or .env
 @pytest.fixture
 def github_token():
-    """Load GitHub token from .env for tests"""
-    env = dotenv_values()
-    token = env.get('GitHubAccessToken')
+    """Load GitHub token from environment variable (CI) or .env (local)"""
+    # Try environment variable first (for CI/CD)
+    token = os.environ.get('GitHubAccessToken')
+
+    # Fall back to .env file (for local development)
     if not token:
-        pytest.skip("No GitHub token found in .env")
+        env = dotenv_values()
+        token = env.get('GitHubAccessToken')
+
+    # OLD CODE (local only):
+    # env = dotenv_values()
+    # token = env.get('GitHubAccessToken')
+
+    if not token:
+        pytest.skip("No GitHub token found in environment or .env file")
     return token
 
 

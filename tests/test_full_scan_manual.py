@@ -1,13 +1,20 @@
 """Comprehensive manual test for scanning a real repository"""
+import os
 from terrence import Terrence, RateLimitException
 from dotenv import dotenv_values
 
-# Load token from .env
-env = dotenv_values()
-token = env.get('GitHubAccessToken')
+# Load token from environment variable (CI) or .env (local)
+token = os.environ.get('GitHubAccessToken')
+if not token:
+    env = dotenv_values()
+    token = env.get('GitHubAccessToken')
+
+# OLD CODE (local only):
+# env = dotenv_values()
+# token = env.get('GitHubAccessToken')
 
 if not token:
-    print("❌ No GitHub token found in .env")
+    print("❌ No GitHub token found in environment or .env")
     exit(1)
 
 print("=" * 70)
