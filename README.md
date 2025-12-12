@@ -143,14 +143,18 @@ repo_info = {
 
 ### Rate Limit Management
 
-```python
-# Check rate limit before scanning
-rate = terrence.get_rate_limit()
-print(f"Remaining: {rate['remaining']}/{rate['limit']}")
-print(f"Resets at: {rate['reset']}")
+GitHub API allows for 5000 requests per hour per API token.
 
-# Terrence automatically checks rate limits during scanning
-# and raises RateLimitException if running low
+Terrence automatically flags a `RateLimitError` if rate limit is too low to make a new repository scan request.
+
+```python
+rate = terrence.get_rate_limit()
+
+rate = {
+    'remaining': 4102,
+    'limit': 5000, # GitHub limit
+    'reset': datetime.datetime(2025, 12, 4, 18, 30, 0, tzinfo=datetime.timezone.utc) # Date format yyyy-mm-dd hr:min:sec+00:00 timezone
+}
 ```
 
 ### Error Handling
