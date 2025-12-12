@@ -156,7 +156,17 @@ rate = {
 }
 ```
 
-### Error Handling
+### Clearing Data
+
+```python
+# Clear results but stay authenticated
+terrence.clear_results()
+
+# Clear everything (deauthenticate)
+terrence.clear_all()
+```
+
+### Sample Error Handling
 
 ```python
 from terrence import Terrence, RateLimitException
@@ -178,16 +188,6 @@ except ValueError as e:
 except Exception as e:
     print(f"Error: {e}")
     # Handle authentication, repo not found, etc.
-```
-
-### Clearing Data
-
-```python
-# Clear results but keep authentication and branch
-terrence.clear_results()
-
-# Clear everything (deauthenticate)
-terrence.clear_all()
 ```
 
 ## API Reference
