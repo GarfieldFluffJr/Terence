@@ -83,7 +83,7 @@ terrence.scan_repository("https://github.com/user/repo_name")
 terrence.branch("v2.0.0")
 terrence.scan_repository("https://github.com/user/repo_name")
 
-# Scan a specific commit
+# Scan a specific commit (can chain methods)
 terrence.branch("abc123def456").scan_repository("https://github.com/user/repo_name")
 ```
 To reset to the default branch, simply clear the results and scan again
