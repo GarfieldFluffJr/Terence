@@ -1,3 +1,5 @@
+from typing import List, Optional
+
 # Takes in the github url and parses it into owner and repo name / path
 def parse_github_url(url: str):
   # Returns original string if prefix isn't found
@@ -19,7 +21,7 @@ def parse_github_url(url: str):
   else:
     raise ValueError(f"Invalid GitHub URL: {url}")
 
-def should_scan_file(file_path: str, extensions: list[str] = None) -> bool:
+def should_scan_file(file_path: str, extensions: Optional[List[str]] = None) -> bool:
   excluded_dirs = [
     'node_modules/',
     '.git/',
