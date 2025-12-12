@@ -1,62 +1,45 @@
-# Terrence 🔍
+# Terrence (py) 🦅
 
-A Python package for scanning and analyzing GitHub repositories. Terrence makes it easy to fetch, filter, and examine code from any public GitHub repository using the GitHub API.
+# ![Terrence Picture](terrence.jpg)
 
-## Features
+Terrence is a Python package that makes it easy to scan and analyze GitHub repositories. It simplifies the GitHub API and processes the repo contents into a simple flat list that can be accessed by file path.
 
-- 🔐 **Secure Authentication** - Use your own GitHub token
-- 📁 **Smart Filtering** - Only scans actual code files (excludes configs, binaries, tests)
-- 🌿 **Branch Support** - Scan specific branches, tags, or commits
-- ⚡ **Rate Limit Protection** - Automatic rate limit checking before and during scans
-- 🎯 **Extension Filtering** - Optionally scan only specific file types (e.g., only `.py` files)
-- 📊 **Repository Info** - Get metadata about scanned repositories
-- 🧹 **Clean API** - Simple, intuitive interface with method chaining
 
 ## Installation
 
-### From PyPI (Recommended)
+### From PyPI
 
 ```bash
 pip install terrence
 ```
 
-### From Source
-
-```bash
-git clone https://github.com/yourusername/terrence.git
-cd terrence
-pip install -e ".[dev]"
-```
-
 ## Quick Start
 
-### 1. Get a GitHub Token
+### 1. Get a GitHub Developer Token
 
 Create a personal access token at: https://github.com/settings/tokens
+- New token (classic)
+- Only permission required: repo -> public_repo
+- Additional permissions are optional
 
-No special permissions needed - just basic read access to public repositories.
-
-### 2. Set Up Authentication
-
-Create a `.env` file in your project:
-
-```env
-GitHubAccessToken=ghp_your_token_here
-```
-
-### 3. Basic Usage
+### 2. Basic Usage
 
 ```python
 from terrence import Terrence
 
-# Initialize and authenticate
-terrence = Terrence().auth("ghp_your_token_here")
+# Initialize a new Terrence instance
+terrence = Terrence()
+
+# Authenticate Terrence
+terrence.auth("ghp_your_token_here")
 
 # Scan a repository
 terrence.scan_repository("https://github.com/pallets/flask")
 
-# Access the results
+# Number of files scanned
 print(f"Found {len(terrence.results)} files")
+
+# Prints (file path, [# of characters in file content])
 for file_path, content in terrence.results.items():
     print(f"{file_path}: {len(content)} characters")
 ```
@@ -65,15 +48,11 @@ for file_path, content in terrence.results.items():
 
 ### Authentication
 
-```python
-from terrence import Terrence
+You must authenticate Terrence with your GitHub API token before scanning any repository
 
-# Method 1: Separate calls
+```python
 terrence = Terrence()
 terrence.auth("ghp_your_token_here")
-
-# Method 2: Method chaining
-terrence = Terrence().auth("ghp_your_token_here")
 ```
 
 ### Scanning Repositories
