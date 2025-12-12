@@ -130,16 +130,15 @@ terrence.results = {
 ### Repository Information
 
 ```python
-terrence.scan_repository("https://github.com/pallets/click")
+terrence.scan_repository("https://github.com/user/repo_name")
 
-# Get repository metadata
 repo_info = terrence.get_repo_info()
-print(f"Owner: {repo_info['owner']}")
-print(f"Repo: {repo_info['repo']}")
-print(f"URL: {repo_info['url']}")
 
-# Access last scanned URL directly
-print(terrence.last_repo_url)
+repo_info = {
+    'owner': 'user',
+    'repo': 'repo_name',
+    'url': 'https://github.com/user/repo_name'
+}
 ```
 
 ### Rate Limit Management
