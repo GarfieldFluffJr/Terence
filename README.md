@@ -36,10 +36,8 @@ terrence.auth("ghp_your_token_here")
 # Scan a repository
 terrence.scan_repository("https://github.com/pallets/flask")
 
-# Number of files scanned
+# Access repo contents
 print(f"Found {len(terrence.results)} files")
-
-# Prints (file path, [# of characters in file content])
 for file_path, content in terrence.results.items():
     print(f"{file_path}: {len(content)} characters")
 ```
@@ -59,13 +57,18 @@ terrence.auth("ghp_your_token_here")
 
 ```python
 # Scan entire repository
-terrence.scan_repository("https://github.com/pallets/click")
+terrence.scan_repository("https://github.com/user/repo_name")
+```
 
+You also have the option to scan specific file types by providing the extension in a list argument
+
+Extension can be prepended with "." but not required (py vs .py)
+```python
 # Scan only Python files
-terrence.scan_repository("https://github.com/pallets/click", extensions=["py"])
+terrence.scan_repository("https://github.com/user/repo_name", ["py"])
 
 # Scan multiple file types
-terrence.scan_repository("https://github.com/pallets/click", extensions=["py", "js", "html"])
+terrence.scan_repository("https://github.com/user/repo_name", ["py", "js", "html"])
 ```
 
 ### Working with Branches
