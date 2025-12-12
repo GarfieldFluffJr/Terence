@@ -1,5 +1,5 @@
 import pytest
-from terrence.utils import *
+from terence.utils import *
 
 class TestParseGitHubURL:
   def test_standard_https_url(self):

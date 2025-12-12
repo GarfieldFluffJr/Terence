@@ -1,8 +1,8 @@
-# Terrence &nbsp;🦅
+# Terence &nbsp;🦅
 
-# ![Terrence Picture](terrence.jpg)
+# ![Terence.jpg](https://i.postimg.cc/zBHVjMTV/terence.jpg)
 
-Terrence is a Python package that makes it easy to scan and analyze GitHub repositories. It simplifies the GitHub API and processes the repo contents into a simple flat dictionary that can be accessed by file path.
+Terence is a Python package that makes it easy to scan and analyze GitHub repositories. It simplifies the GitHub API and processes the repo contents into a simple flat dictionary that can be accessed by file path.
 
 
 ## Installation
@@ -10,7 +10,7 @@ Terrence is a Python package that makes it easy to scan and analyze GitHub repos
 ### From PyPI
 
 ```bash
-pip install terrence
+pip install terence
 ```
 
 ## Quick Start
@@ -25,20 +25,20 @@ Create a personal access token at: https://github.com/settings/tokens
 ### 2. Basic Usage
 
 ```python
-from terrence import Terrence
+from terence import Terence
 
-# Initialize a new Terrence instance
-terrence = Terrence()
+# Initialize a new Terence instance
+terence = Terence()
 
-# Authenticate Terrence
-terrence.auth("ghp_your_token_here")
+# Authenticate Terence
+terence.auth("ghp_your_token_here")
 
 # Scan a repository
-terrence.scan_repository("https://github.com/pallets/flask")
+terence.scan_repository("https://github.com/pallets/flask")
 
 # Access repo contents
-print(f"Found {len(terrence.results)} files")
-for file_path, content in terrence.results.items():
+print(f"Found {len(terence.results)} files")
+for file_path, content in terence.results.items():
     print(f"{file_path}: {len(content)} characters")
 ```
 
@@ -46,18 +46,18 @@ for file_path, content in terrence.results.items():
 
 ### Authentication
 
-You must authenticate Terrence with your GitHub API token before scanning any repository
+You must authenticate Terence with your GitHub API token before scanning any repository
 
 ```python
-terrence = Terrence()
-terrence.auth("ghp_your_token_here")
+terence = Terence()
+terence.auth("ghp_your_token_here")
 ```
 
 ### Scanning Repositories
 
 ```python
 # Scan entire repository
-terrence.scan_repository("https://github.com/user/repo_name")
+terence.scan_repository("https://github.com/user/repo_name")
 ```
 
 You also have the option to scan specific file types by providing the extension in a list argument
@@ -65,10 +65,10 @@ You also have the option to scan specific file types by providing the extension 
 Extension can be prepended with "." but not required (py vs .py)
 ```python
 # Scan only Python files
-terrence.scan_repository("https://github.com/user/repo_name", ["py"])
+terence.scan_repository("https://github.com/user/repo_name", ["py"])
 
 # Scan multiple file types
-terrence.scan_repository("https://github.com/user/repo_name", ["py", "js", "html"])
+terence.scan_repository("https://github.com/user/repo_name", ["py", "js", "html"])
 ```
 
 ### Working with Branches
@@ -76,29 +76,29 @@ You can scan the contents of a specific branch rather than the default main/mast
 
 ```python
 # Scan a specific branch name
-terrence.branch("develop")
-terrence.scan_repository("https://github.com/user/repo_name")
+terence.branch("develop")
+terence.scan_repository("https://github.com/user/repo_name")
 
 # Scan a specific tag
-terrence.branch("v2.0.0")
-terrence.scan_repository("https://github.com/user/repo_name")
+terence.branch("v2.0.0")
+terence.scan_repository("https://github.com/user/repo_name")
 
 # Scan a specific commit (can chain methods)
-terrence.branch("abc123def456").scan_repository("https://github.com/user/repo_name")
+terence.branch("abc123def456").scan_repository("https://github.com/user/repo_name")
 ```
 To reset to the default branch, simply clear the results and scan again
 ```python
 # Reset to default branch
-terrence.clear_results() 
-terrence.scan_repository("https://github.com/user/repo_name")
+terence.clear_results() 
+terence.scan_repository("https://github.com/user/repo_name")
 ```
 
 ### Accessing Results
 
-Once a scan is performed, the repository's file contents are stored in a flat dictionary in `terrence.results`.
+Once a scan is performed, the repository's file contents are stored in a flat dictionary in `terence.results`.
 
 ```python
-results = terrence.results
+results = terence.results
 
 # List all files:
 for path in results.keys():
@@ -119,7 +119,7 @@ for file_path, content in results.items():
 Results is a flat dictionary with each key being the path to the file including the file name and the value is the raw contents of the file
 
 ```python
-terrence.results = {
+terence.results = {
     'frontend/app/index.html': '<!DOCTYPE html>\n<html>\n<head>\n<meta charset="utf-8">\n</head></html>...',
     'frontend/app/styles/globals.css': 'body {\n  font-family: Arial, sans-serif;\n...}\nh1 {\n  color: #333;\n}'
 }
@@ -128,9 +128,9 @@ terrence.results = {
 ### Repository Information
 
 ```python
-terrence.scan_repository("https://github.com/user/repo_name")
+terence.scan_repository("https://github.com/user/repo_name")
 
-repo_info = terrence.get_repo_info()
+repo_info = terence.get_repo_info()
 
 repo_info = {
     'owner': 'user',
@@ -143,10 +143,10 @@ repo_info = {
 
 GitHub API allows for 5000 requests per hour per authenticated API token or 60 for unauthenticated.
 
-Terrence automatically flags a `RateLimitError` if rate limit is too low to make a new repository scan request.
+Terence automatically flags a `RateLimitError` if rate limit is too low to make a new repository scan request.
 
 ```python
-rate = terrence.get_rate_limit()
+rate = terence.get_rate_limit()
 
 rate = {
     'remaining': 4102,
@@ -160,22 +160,22 @@ rate = {
 
 ```python
 # Clear results but stay authenticated
-terrence.clear_results()
+terence.clear_results()
 
 # Clear everything (deauthenticate)
-terrence.clear_all()
+terence.clear_all()
 ```
 
 ### Sample Error Handling
 
 ```python
-from terrence import Terrence, RateLimitException
+from terence import Terence, RateLimitException
 
-terrence = Terrence().auth("ghp_your_token_here")
+terence = Terence().auth("ghp_your_token_here")
 
 try:
-    terrence.scan_repository("https://github.com/owner/repo")
-    print(f"Success! Found {len(terrence.results)} files")
+    terence.scan_repository("https://github.com/owner/repo")
+    print(f"Success! Found {len(terence.results)} files")
 
 except RateLimitException as e:
     print(f"Rate limit reached: {e}")
@@ -194,7 +194,7 @@ except Exception as e:
 
 ### Allowed Extensions
 
-By default, Terrence scans these file types:
+By default, Terence scans these file types:
 
 - **Python:** `.py`
 - **JavaScript/TypeScript:** `.js`, `.jsx`, `.ts`, `.tsx`
@@ -219,10 +219,10 @@ The following directories are automatically excluded:
 Raised when GitHub API rate limit is too low (< 10 requests remaining).
 
 ```python
-from terrence import RateLimitException
+from terence import RateLimitException
 
 try:
-    terrence.scan_repository(url)
+    terence.scan_repository(url)
 except RateLimitException as e:
     print(f"Rate limit reached: {e}")
 ```
@@ -247,8 +247,8 @@ Raised for:
 ### Setup
 
 ```bash
-git clone https://github.com/yourusername/terrence.git
-cd terrence
+git clone https://github.com/yourusername/terence.git
+cd terence
 pip install -e ".[dev]"
 ```
 
@@ -259,10 +259,10 @@ pip install -e ".[dev]"
 pytest tests/test_client.py -v
 
 # Run specific test
-pytest tests/test_client.py::TestTerrence::test_auth -v
+pytest tests/test_client.py::TestTerence::test_auth -v
 
 # Run with coverage
-pytest tests/test_client.py --cov=terrence --cov-report=html
+pytest tests/test_client.py --cov=terence --cov-report=html
 ```
 
 ## Requirements

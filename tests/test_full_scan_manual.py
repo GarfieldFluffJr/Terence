@@ -1,6 +1,6 @@
 """Comprehensive manual test for scanning a real repository"""
 import os
-from terrence import Terrence, RateLimitException
+from terence import Terence, RateLimitException
 from dotenv import dotenv_values
 
 # Load token from environment variable (CI) or .env (local)
@@ -28,7 +28,7 @@ print("=" * 70)
 # - "https://github.com/pallets/click" (medium, has nesting)
 TEST_REPO_URL = "https://github.com/pallets/click"
 
-terrence = Terrence().auth(token)
+terence = Terence().auth(token)
 
 print(f"\n📦 Test Repository: {TEST_REPO_URL}")
 print("=" * 70)
@@ -36,7 +36,7 @@ print("=" * 70)
 # Test 1: Check rate limit before scanning
 print("\n1️⃣  Checking rate limit before scan...")
 try:
-    rate = terrence.get_rate_limit()
+    rate = terence.get_rate_limit()
     print(f"   ✅ Rate limit: {rate['remaining']}/{rate['limit']}")
     print(f"   ✅ Resets at: {rate['reset']}")
 except Exception as e:
@@ -45,16 +45,16 @@ except Exception as e:
 
 # Test 2: Check initial state
 print("\n2️⃣  Checking initial state...")
-print(f"   ✅ Results: {len(terrence.results)} files (should be 0)")
-print(f"   ✅ Last repo: {terrence.last_repo_url} (should be None)")
-print(f"   ✅ Repo info: {terrence.get_repo_info()} (should be None)")
+print(f"   ✅ Results: {len(terence.results)} files (should be 0)")
+print(f"   ✅ Last repo: {terence.last_repo_url} (should be None)")
+print(f"   ✅ Repo info: {terence.get_repo_info()} (should be None)")
 
 # Test 3: Scan the repository
 print("\n3️⃣  Scanning repository...")
 try:
-    terrence.scan_repository(TEST_REPO_URL)
+    terence.scan_repository(TEST_REPO_URL)
     print(f"   ✅ Scan completed successfully!")
-    print(f"   ✅ Found {len(terrence.results)} files")
+    print(f"   ✅ Found {len(terence.results)} files")
 except RateLimitException as e:
     print(f"   ❌ Rate limit error: {e}")
     exit(1)
@@ -64,22 +64,22 @@ except Exception as e:
 
 # Test 4: Verify results are populated
 print("\n4️⃣  Verifying results...")
-if len(terrence.results) > 0:
-    print(f"   ✅ Results populated: {len(terrence.results)} files")
+if len(terence.results) > 0:
+    print(f"   ✅ Results populated: {len(terence.results)} files")
 
     # Show all file paths
     print("\n   📁 Files found:")
-    for i, path in enumerate(sorted(terrence.results.keys()), 1):
+    for i, path in enumerate(sorted(terence.results.keys()), 1):
         print(f"      {i}. {path}")
 else:
     print(f"   ❌ No files found (this might be expected if repo has only non-code files)")
 
 # Test 5: Check file contents
 print("\n5️⃣  Checking file contents...")
-if len(terrence.results) > 0:
+if len(terence.results) > 0:
     # Get first file
-    first_file_path = list(terrence.results.keys())[0]
-    first_file_content = terrence.results[first_file_path]
+    first_file_path = list(terence.results.keys())[0]
+    first_file_content = terence.results[first_file_path]
 
     print(f"   ✅ Sample file: {first_file_path}")
     print(f"   ✅ Content length: {len(first_file_content)} characters")
@@ -100,7 +100,7 @@ else:
 
 # Test 6: Test get_repo_info()
 print("\n6️⃣  Testing get_repo_info()...")
-repo_info = terrence.get_repo_info()
+repo_info = terence.get_repo_info()
 if repo_info:
     print(f"   ✅ Owner: {repo_info['owner']}")
     print(f"   ✅ Repo: {repo_info['repo']}")
@@ -116,9 +116,9 @@ else:
 
 # Test 7: Test last_repo_url
 print("\n7️⃣  Testing last_repo_url...")
-if terrence.last_repo_url:
-    print(f"   ✅ Last repo URL: {terrence.last_repo_url}")
-    if terrence.last_repo_url == TEST_REPO_URL:
+if terence.last_repo_url:
+    print(f"   ✅ Last repo URL: {terence.last_repo_url}")
+    if terence.last_repo_url == TEST_REPO_URL:
         print(f"   ✅ Matches test repo")
     else:
         print(f"   ❌ URL mismatch")
@@ -127,27 +127,27 @@ else:
 
 # Test 8: Test clear_results()
 print("\n8️⃣  Testing clear_results()...")
-files_before = len(terrence.results)
-terrence.clear_results()
-files_after = len(terrence.results)
+files_before = len(terence.results)
+terence.clear_results()
+files_after = len(terence.results)
 print(f"   Files before: {files_before}")
 print(f"   Files after: {files_after}")
-if files_after == 0 and terrence.last_repo_url is None:
+if files_after == 0 and terence.last_repo_url is None:
     print(f"   ✅ clear_results() works correctly")
-    print(f"   ✅ Repo info: {terrence.get_repo_info()} (should be None)")
+    print(f"   ✅ Repo info: {terence.get_repo_info()} (should be None)")
 else:
     print(f"   ❌ clear_results() didn't clear properly")
 
 # Test 9: Test that we're still authenticated
 print("\n9️⃣  Verifying still authenticated...")
-if terrence.token and terrence._auth:
+if terence.token and terence._auth:
     print(f"   ✅ Still authenticated after clear_results()")
 
     # Scan again to verify everything still works
     print(f"   🔄 Re-scanning to verify...")
     try:
-        terrence.scan_repository(TEST_REPO_URL)
-        print(f"   ✅ Re-scan successful: {len(terrence.results)} files")
+        terence.scan_repository(TEST_REPO_URL)
+        print(f"   ✅ Re-scan successful: {len(terence.results)} files")
     except Exception as e:
         print(f"   ❌ Re-scan failed: {e}")
 else:
@@ -156,7 +156,7 @@ else:
 # Test 10: Check rate limit after scanning
 print("\n🔟 Checking rate limit after scan...")
 try:
-    rate_after = terrence.get_rate_limit()
+    rate_after = terence.get_rate_limit()
     print(f"   ✅ Rate limit: {rate_after['remaining']}/{rate_after['limit']}")
 
     # Calculate how many requests we used
@@ -170,8 +170,8 @@ print("\n" + "=" * 70)
 print("✅ COMPREHENSIVE TEST COMPLETE")
 print("=" * 70)
 print(f"\nFinal state:")
-print(f"  - Files in results: {len(terrence.results)}")
-print(f"  - Last repo URL: {terrence.last_repo_url}")
-print(f"  - Repo info: {terrence.get_repo_info()}")
-print(f"  - Authenticated: {terrence.token is not None}")
+print(f"  - Files in results: {len(terence.results)}")
+print(f"  - Last repo URL: {terence.last_repo_url}")
+print(f"  - Repo info: {terence.get_repo_info()}")
+print(f"  - Authenticated: {terence.token is not None}")
 print("\n" + "=" * 70)

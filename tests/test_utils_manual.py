@@ -1,5 +1,5 @@
 """Manual tests for utils module - run with: python tests/test_utils_manual.py"""
-from terrence.utils import parse_github_url, should_scan_file
+from terence.utils import parse_github_url, should_scan_file
 
 
 if __name__ == "__main__":

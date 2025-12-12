@@ -1,12 +1,12 @@
 from github import Github, Auth, GithubException, BadCredentialsException, UnknownObjectException
-from terrence.utils import parse_github_url, should_scan_file
+from terence.utils import parse_github_url, should_scan_file
 
 # Custom exception for rate limiting
 class RateLimitException(Exception):
   """Raised when GitHub API rate limit is reached"""
   pass
 
-class Terrence:
+class Terence:
 
   def __init__(self):
     self.token = None
@@ -15,14 +15,14 @@ class Terrence:
     self.last_repo_url = None
     self._branch = None  # Private variable for branch/commit
 
-  # Representation method so when user performs print(terrence), they see info rather than memory address
+  # Representation method so when user performs print(terence), they see info rather than memory address
   def __repr__(self):
     auth_status = "authenticated" if self._auth else "not authenticated"
     branch_info = f", branch={self._branch}" if self._branch else ""
     if self.results:
-        return f"Terrence({auth_status}{branch_info}, files={len(self.results)})"
+        return f"Terence({auth_status}{branch_info}, files={len(self.results)})"
     else:
-        return f"Terrence({auth_status}{branch_info}, no scans yet)"
+        return f"Terence({auth_status}{branch_info}, no scans yet)"
 
   def auth(self, token: str):
     self.token = token
@@ -31,7 +31,7 @@ class Terrence:
   
   def scan_repository(self, repo_url: str, extensions: list = None):
     if not self._auth or not self.token:
-      raise Exception("Not authenticated. Call Terrence.auth(token) first.")
+      raise Exception("Not authenticated. Call Terence.auth(token) first.")
 
     owner, repo_name = parse_github_url(repo_url)
 
@@ -95,7 +95,7 @@ class Terrence:
       }
     """
     if not self._auth or not self.token:
-      raise Exception("Not authenticated. Call Terrence.auth(token) first.")
+      raise Exception("Not authenticated. Call Terence.auth(token) first.")
 
     with Github(auth=self._auth) as g:
       rate_limit = g.get_rate_limit()

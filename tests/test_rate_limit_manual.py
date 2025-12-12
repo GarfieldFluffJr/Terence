@@ -1,6 +1,6 @@
 """Manual test for rate limit error handling"""
 import os
-from terrence import Terrence, RateLimitException
+from terence import Terence, RateLimitException
 from dotenv import dotenv_values
 
 # Load token from environment variable (CI) or .env (local)
@@ -21,12 +21,12 @@ print("=" * 60)
 print("Testing Rate Limit Error Handling")
 print("=" * 60)
 
-terrence = Terrence().auth(token)
+terence = Terence().auth(token)
 
 # Test 1: Check current rate limit
 print("\n1️⃣  Checking current rate limit...")
 try:
-    rate_info = terrence.get_rate_limit()
+    rate_info = terence.get_rate_limit()
     print(f"   ✅ Remaining: {rate_info['remaining']}/{rate_info['limit']}")
     print(f"   ✅ Resets at: {rate_info['reset']}")
 except Exception as e:
@@ -36,25 +36,25 @@ except Exception as e:
 print("\n2️⃣  Attempting to scan repository...")
 print("   (This should fail because threshold is set to 4000)")
 try:
-    terrence.scan_repository("https://github.com/pallets/click")
-    print(f"   ✅ Success! Found {len(terrence.results)} files")
+    terence.scan_repository("https://github.com/pallets/click")
+    print(f"   ✅ Success! Found {len(terence.results)} files")
 except RateLimitException as e:
     print(f"   ⚠️  RateLimitException caught!")
     print(f"   ⚠️  Message: {e}")
-    print(f"   ✅ Results cleared: {len(terrence.results)} files (should be 0)")
+    print(f"   ✅ Results cleared: {len(terence.results)} files (should be 0)")
 except Exception as e:
     print(f"   ❌ Other error: {e}")
 
 # Test 3: Verify results are empty
 print("\n3️⃣  Verifying results are empty after error...")
-if len(terrence.results) == 0:
+if len(terence.results) == 0:
     print("   ✅ Results are empty (as expected)")
 else:
-    print(f"   ❌ Results not empty: {len(terrence.results)} files")
+    print(f"   ❌ Results not empty: {len(terence.results)} files")
 
 # Test 4: Check repo info (should be None since scan failed)
 print("\n4️⃣  Checking repo info...")
-repo_info = terrence.get_repo_info()
+repo_info = terence.get_repo_info()
 if repo_info is None:
     print("   ✅ Repo info is None (as expected, scan failed)")
 else:
@@ -62,15 +62,15 @@ else:
 
 # Test 5: Demonstrate proper error handling pattern
 print("\n5️⃣  Demonstrating proper error handling pattern...")
-def safe_scan(terrence_instance, url):
+def safe_scan(terence_instance, url):
     """Example of how external programs should handle errors"""
     try:
         print(f"   📡 Attempting to scan: {url}")
-        terrence_instance.scan_repository(url)
-        print(f"   ✅ Success! Found {len(terrence_instance.results)} files")
+        terence_instance.scan_repository(url)
+        print(f"   ✅ Success! Found {len(terence_instance.results)} files")
 
         # Get repo info
-        info = terrence_instance.get_repo_info()
+        info = terence_instance.get_repo_info()
         print(f"   ✅ Scanned: {info['owner']}/{info['repo']}")
 
     except RateLimitException as e:
@@ -85,7 +85,7 @@ def safe_scan(terrence_instance, url):
         print(f"   ❌ Error: {e}")
         print("   💡 Suggestion: Check token and repository access")
 
-safe_scan(terrence, "https://github.com/pallets/click")
+safe_scan(terence, "https://github.com/pallets/click")
 
 print("\n" + "=" * 60)
 print("✅ Test complete!")

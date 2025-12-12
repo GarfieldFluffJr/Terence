@@ -1,6 +1,6 @@
 """Manual test for branch functionality"""
 import os
-from terrence import Terrence
+from terence import Terence
 from dotenv import dotenv_values
 
 # Load token from environment variable (CI) or .env (local)
@@ -31,20 +31,20 @@ print(f"🔀 Branch 1: {BRANCH_1}")
 print(f"🔀 Branch 2: {BRANCH_2}")
 print("=" * 70)
 
-terrence = Terrence().auth(token)
+terence = Terence().auth(token)
 
 # Test 1: Scan first branch
 print(f"\n1️⃣  Scanning branch: {BRANCH_1}...")
 try:
-    terrence.branch(BRANCH_1)
-    terrence.scan_repository(TEST_REPO)
-    branch1_files = len(terrence.results)
-    branch1_results = dict(terrence.results)  # Save a copy of branch 1 results
+    terence.branch(BRANCH_1)
+    terence.scan_repository(TEST_REPO)
+    branch1_files = len(terence.results)
+    branch1_results = dict(terence.results)  # Save a copy of branch 1 results
     print(f"   ✅ Found {branch1_files} files on '{BRANCH_1}' branch")
-    print(f"   📁 Files: {sorted(list(terrence.results.keys()))[:5]}{'...' if branch1_files > 5 else ''}")
+    print(f"   📁 Files: {sorted(list(terence.results.keys()))[:5]}{'...' if branch1_files > 5 else ''}")
 
     # Show repo info
-    info = terrence.get_repo_info()
+    info = terence.get_repo_info()
     print(f"   ✅ Repo: {info['owner']}/{info['repo']}")
 
     # Show content of first file
@@ -64,17 +64,17 @@ except Exception as e:
 
 # Test 2: Clear and scan second branch
 print(f"\n2️⃣  Scanning branch: {BRANCH_2}...")
-terrence.clear_results()
+terence.clear_results()
 
 try:
-    terrence.branch(BRANCH_2)
-    print(f"   🔀 Set branch to: {terrence._branch}")
+    terence.branch(BRANCH_2)
+    print(f"   🔀 Set branch to: {terence._branch}")
 
-    terrence.scan_repository(TEST_REPO)
-    branch2_files = len(terrence.results)
-    branch2_results = dict(terrence.results)  # Save a copy of branch 2 results
+    terence.scan_repository(TEST_REPO)
+    branch2_files = len(terence.results)
+    branch2_results = dict(terence.results)  # Save a copy of branch 2 results
     print(f"   ✅ Found {branch2_files} files on '{BRANCH_2}' branch")
-    print(f"   📁 Files: {sorted(list(terrence.results.keys()))[:5]}{'...' if branch2_files > 5 else ''}")
+    print(f"   📁 Files: {sorted(list(terence.results.keys()))[:5]}{'...' if branch2_files > 5 else ''}")
 
     # Show content of first file from branch 2
     if branch2_results:
@@ -139,26 +139,26 @@ except Exception as e:
 # Test 3: Method chaining
 print("\n3️⃣  Testing method chaining...")
 try:
-    terrence2 = Terrence().auth(token).branch("main")
+    terence2 = Terence().auth(token).branch("main")
     print(f"   ✅ Method chaining works!")
-    print(f"   ✅ Branch set to: {terrence2._branch}")
+    print(f"   ✅ Branch set to: {terence2._branch}")
 except Exception as e:
     print(f"   ❌ Error: {e}")
 
 # Test 4: Invalid branch handling
 print("\n4️⃣  Testing invalid branch...")
 try:
-    terrence.clear_results()
-    terrence.branch("nonexistent-branch-12345")
-    terrence.scan_repository("https://github.com/octocat/Spoon-Knife")
+    terence.clear_results()
+    terence.branch("nonexistent-branch-12345")
+    terence.scan_repository("https://github.com/octocat/Spoon-Knife")
     print(f"   ❌ Should have raised error for invalid branch")
 except Exception as e:
     print(f"   ✅ Correctly raised error: {e}")
 
 # Test 5: Resetting branch
 print("\n5️⃣  Testing branch reset...")
-terrence.clear_results()
-print(f"   ✅ Branch after clear_results: {terrence._branch} (should be None)")
+terence.clear_results()
+print(f"   ✅ Branch after clear_results: {terence._branch} (should be None)")
 
 print("\n" + "=" * 70)
 print("✅ BRANCH TEST COMPLETE")
