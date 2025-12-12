@@ -72,19 +72,25 @@ terrence.scan_repository("https://github.com/user/repo_name", ["py", "js", "html
 ```
 
 ### Working with Branches
+You can scan the contents of a specific branch rather than the default main/master branch
 
 ```python
-# Scan a specific branch
-terrence.branch("develop").scan_repository("https://github.com/pallets/flask")
+# Scan a specific branch name
+terrence.branch("develop")
+terrence.scan_repository("https://github.com/user/repo_name")
 
 # Scan a specific tag
-terrence.branch("v2.0.0").scan_repository("https://github.com/pallets/flask")
+terrence.branch("v2.0.0")
+terrence.scan_repository("https://github.com/user/repo_name")
 
 # Scan a specific commit
-terrence.branch("abc123def456").scan_repository("https://github.com/pallets/flask")
-
+terrence.branch("abc123def456").scan_repository("https://github.com/user/repo_name")
+```
+To reset to the default branch, simply clear the results and scan again
+```python
 # Reset to default branch
-terrence.clear_results()  # This also clears the branch
+terrence.clear_results() 
+terrence.scan_repository("https://github.com/user/repo_name")
 ```
 
 ### Accessing Results
