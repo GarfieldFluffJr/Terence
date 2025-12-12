@@ -31,4 +31,4 @@
         run: |
           pytest tests/test_client.py -v
         env:
-          GitHubAccessToken: ${{ secrets.GITHUB_TOKEN }}
+          GitHubAccessToken: ${{ secrets.GITHUB_TESTING_TOKEN }}
