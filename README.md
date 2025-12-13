@@ -34,7 +34,7 @@ terence = Terence()
 terence.auth("ghp_your_token_here")
 
 # Scan a repository
-terence.scan_repository("https://github.com/pallets/flask")
+terence.scan_repository("https://github.com/user/repo_name")
 
 # Access repo contents
 print(f"Found {len(terence.results)} files")
@@ -174,7 +174,7 @@ from terence import Terence, RateLimitException
 terence = Terence().auth("ghp_your_token_here")
 
 try:
-    terence.scan_repository("https://github.com/owner/repo")
+    terence.scan_repository("https://github.com/user/repo_name")
     print(f"Success! Found {len(terence.results)} files")
 
 except RateLimitException as e:
