@@ -38,6 +38,7 @@ def should_scan_file(file_path: str, extensions: Optional[List[str]] = None) -> 
 
   excluded_files = [
     '__init__.py',
+    'next.config.ts',
   ]
 
   # Put in a tuple since endsWith accepts a tuple and checks for any of the items
