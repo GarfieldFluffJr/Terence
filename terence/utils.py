@@ -33,7 +33,11 @@ def should_scan_file(file_path: str, extensions: Optional[List[str]] = None) -> 
     'bin/', 'obj/',
     'test/', 'tests/',
     '.pytest_cache/',
-    'coverage/', 
+    'coverage/',
+  ]
+
+  excluded_files = [
+    '__init__.py',
   ]
 
   # Put in a tuple since endsWith accepts a tuple and checks for any of the items
@@ -55,6 +59,10 @@ def should_scan_file(file_path: str, extensions: Optional[List[str]] = None) -> 
 
   for excluded_dir in excluded_dirs:
     if excluded_dir in file_path:
+      return False
+
+  for excluded_file in excluded_files:
+    if file_path.endswith(excluded_file):
       return False
   
   if extensions is not None:
