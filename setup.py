@@ -3,7 +3,7 @@ from setuptools import setup, find_packages
 setup(
     # Package metadata
     name="terence",
-    version="1.0.5",
+    version="1.0.6",
     author="GarfieldFluffJr",
     author_email="louieyin6@gmail.com",
     description="Terence is a Python package that makes it easy to scan and analyze GitHub repositories. It simplifies the GitHub API and processes the repo contents into a simple flat dictionary that can be accessed by file path.",
